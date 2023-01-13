@@ -8,3 +8,4 @@ CREATE TABLE IF NOT EXISTS users (
   country ENUM('US', 'CO', 'TN') NOT NULL DEFAULT 'US',
   PRIMARY KEY (id),
   UNIQUE (email));
+  
