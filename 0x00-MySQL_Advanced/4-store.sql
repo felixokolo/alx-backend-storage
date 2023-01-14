@@ -1,11 +1,11 @@
 -- Buy buy
 
-DELIMITER $$
-CREATE TRIGGER IF NOT EXISTS reduce
+DELIMITER $$ ;
+CREATE TRIGGER reduce
 AFTER INSERT
 ON orders FOR EACH ROW
 BEGIN
-DECLARE old_quant INT;
+DECLARE old_quant INT(11);
 SELECT quantity
 INTO old_quant
 FROM items
