@@ -2,12 +2,16 @@
 
 DELIMITER $$ ;
 CREATE TRIGGER email_val
-AFTER UPDATE
+BEFORE UPDATE
 ON users FOR EACH ROW
 BEGIN
-IF NEW.email != OLD.email THEN
-NEW.valid_email = 0
+DECLARE old_email VARCHAR(255);
+SELECT email
+INTO old_email
+FROM users
 WHERE NEW.id = users.id;
+IF STRCMP(NEW.email, old_email) != 0  THEN
+SET NEW.valid_email = 0;
 END IF;
 END;$$
 DELIMITER ; $$
