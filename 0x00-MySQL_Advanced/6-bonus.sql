@@ -10,7 +10,7 @@ SELECT id
 INTO exist_pro
 FROM projects
 WHERE projects.name LIKE project_name;
-IF exist_pro = NULL THEN
+IF exist_pro IS NULL THEN
 INSERT INTO projects (name) VALUES (project_name);
 SELECT id
 INTO exist_pro
