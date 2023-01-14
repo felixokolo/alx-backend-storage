@@ -8,6 +8,7 @@ SELECT AVG(score)
 INTO avg_sc
 FROM corrections
 WHERE corrections.user_id = user_id_;
-UPDATE users SET average_score = avg_sc;
+UPDATE users SET average_score = avg_sc
+WHERE users.id = user_id_;
 END;$$
 DELIMITER ; $$
