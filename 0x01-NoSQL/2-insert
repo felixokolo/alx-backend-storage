@@ -1,2 +1,2 @@
 // Insert a document
-db.my_db.insert({"name" : "Holberton school"})
+db.this.insert({"name" : "Holberton school"})
