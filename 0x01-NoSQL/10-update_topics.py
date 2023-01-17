@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Updates topics in a document
 """
