@@ -4,6 +4,7 @@ Redis class testing
 """
 import redis
 from uuid import uuid4
+from typing import Union
 
 
 class Cache:
@@ -33,3 +34,14 @@ class Cache:
         k = str(uuid4())
         self._redis.mset({k: data})
         return k
+
+
+    def get(self, key: str, fn: callable) -> Union[int, str, float]:
+        """
+        Get a key from redis database
+        """
+
+        ret = self._redis.get(key)
+        if ret is None:
+            return ret
+        
