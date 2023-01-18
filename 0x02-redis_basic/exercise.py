@@ -124,4 +124,4 @@ def replay(fn: Callable) -> None:
     outputs = cache.lrange(f'{fn.__qualname__}:outputs', 0, -1)
     for ins, outs in zip(inputs, outputs):
         print(f"{fn.__qualname__}" +
-              f"(*{ins.decode('utf-8')} -> {outs.decode('utf-8')}")
+              f"(*{ins.decode('utf-8')}) -> {outs.decode('utf-8')}")
