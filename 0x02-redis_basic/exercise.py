@@ -5,6 +5,25 @@ Redis class testing
 import redis
 from uuid import uuid4
 from typing import Union
+from functools import wraps
+
+
+def count_calls(fn: callable) -> callable:
+    """
+    Decorator function
+    """
+
+    @wraps(fn)
+    def wrapper(self, *args, **kwargs):
+        """
+        Wrapper function
+        """
+        #print('no 1', args[0])
+        self._redis.incrby(wrapper.__qualname__, 1)
+        return fn(self, *args, **kwargs)
+    return wrapper
+
+
 
 
 class Cache:
@@ -20,6 +39,7 @@ class Cache:
         self._redis.flushdb()
 
 
+    @count_calls
     def store(self, data: bytes) -> str:
         """
         Stores data using random uuid key
@@ -36,7 +56,7 @@ class Cache:
         return k
 
 
-    def get(self, key: Union[bytes, int, float, str], fn: callable) -> Union[int, str, float, None]:
+    def get(self, key: Union[bytes, int, float, str], fn: callable = None) -> Union[int, str, float, None]:
         """
         Get a key from redis database
         """
