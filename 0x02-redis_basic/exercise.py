@@ -9,18 +9,19 @@ from typing import Callable
 from functools import wraps
 
 
-def count_calls(fn: Callable) -> Callable:
+def count_calls(method: Callable) -> Callable:
     """
     Decorator function
     """
 
-    @wraps(fn)
+    @wraps(method)
     def wrapper(self, *args, **kwargs):
         """
         Wrapper function
         """
-        self._redis.incrby(fn.__qualname__, 1)
-        return fn(self, *args, **kwargs)
+        key = method.__qualname__
+        self._redis.incr(key)
+        return method(self, *args, **kwargs)
     return wrapper
 
 
@@ -51,13 +52,13 @@ class Cache:
         UUID key of stored data
         """
 
-        k = str(uuid4())
+        k: str = str(uuid4())
         if data is None or type(data) not in [bytes,
                                               str,
                                               int,
                                               float]:
             return k
-        self._redis.mset({k: data})
+        self._redis.set(k, data)
         return k
 
     def get(self, key: Union[bytes, str],
