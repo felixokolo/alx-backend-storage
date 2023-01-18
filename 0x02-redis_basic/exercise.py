@@ -36,12 +36,28 @@ class Cache:
         return k
 
 
-    def get(self, key: str, fn: callable) -> Union[int, str, float]:
+    def get(self, key: Union[bytes, int, float, str], fn: callable) -> Union[int, str, float, None]:
         """
         Get a key from redis database
         """
 
         ret = self._redis.get(key)
-        if ret is None:
+        if ret is None or fn is None:
             return ret
-        
+        return fn(ret)
+
+
+    def get_str(self, key: str) -> str:
+        """
+        gets a str from redis database
+        """
+
+        return self.get(key, str)
+
+
+    def get_int(self, key: str) -> int:
+        """
+        gets an int from redis database
+        """
+
+        return self.get(key, int)
