@@ -37,7 +37,10 @@ class Cache:
         self._redis.flushdb()
 
     @count_calls
-    def store(self, data: bytes) -> str:
+    def store(self, data: Union[bytes,
+                                str,
+                                int,
+                                float]) -> str:
         """
         Stores data using random uuid key
 
