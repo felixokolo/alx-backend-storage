@@ -51,6 +51,11 @@ class Cache:
         UUID key of stored data
         """
 
+        if data is None or type(data) not in [bytes,
+                                              str,
+                                              int,
+                                              float]:
+            return None
         k = str(uuid4())
         self._redis.mset({k: data})
         return k
