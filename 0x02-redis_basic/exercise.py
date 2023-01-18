@@ -18,8 +18,7 @@ def count_calls(fn: callable) -> callable:
         """
         Wrapper function
         """
-        #print('no 1', args[0])
-        self._redis.incrby(wrapper.__qualname__, 1)
+        self._redis.incrby(fn.__qualname__, 1)
         return fn(self, *args, **kwargs)
     return wrapper
 
