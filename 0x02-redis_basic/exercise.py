@@ -24,6 +24,7 @@ def count_calls(method: Callable) -> Callable:
         return method(self, *args, **kwargs)
     return wrapper
 
+
 def call_history(method: Callable) -> Callable:
     """
     Decorator function
@@ -110,14 +111,17 @@ class Cache:
 
         return self.get(key, int)
 
+
 def replay(fn: Callable) -> None:
     """
     Prints a formatted out put of calls details of fn
     """
 
     cache = redis.Redis()
-    print(f'{fn.__qualname__} was called {int(cache.get(fn.__qualname__))} times:')
+    print(f'{fn.__qualname__}' +
+          f' was called {cache.get(fn.__qualname__).decode("utf-8")} times:')
     inputs = cache.lrange(f'{fn.__qualname__}:inputs', 0, -1)
     outputs = cache.lrange(f'{fn.__qualname__}:outputs', 0, -1)
     for ins, outs in zip(inputs, outputs):
-        print(f"{fn.__qualname__}(*{ins.decode('utf-8')} -> {outs.decode('utf-8')}")
+        print(f"{fn.__qualname__}" +
+              f"(*{ins.decode('utf-8')} -> {outs.decode('utf-8')}")
