@@ -45,7 +45,7 @@ def call_history(method: Callable) -> Callable:
 
 
 class Cache:
-    """
+    """Cache.store was called 3 times:
     Redis cache class definition
     """
 
@@ -109,3 +109,15 @@ class Cache:
         """
 
         return self.get(key, int)
+
+def replay(fn: Callable) -> None:
+    """
+    Prints a formatted out put of calls details of fn
+    """
+
+    cache = redis.Redis()
+    print(f'{fn.__qualname__} was called {int(cache.get(fn.__qualname__))} times:')
+    inputs = cache.lrange(f'{fn.__qualname__}:inputs', 0, -1)
+    outputs = cache.lrange(f'{fn.__qualname__}:outputs', 0, -1)
+    for ins, outs in zip(inputs, outputs):
+        print(f"{fn.__qualname__}(*{ins.decode('utf-8')} -> {outs.decode('utf-8')}")
