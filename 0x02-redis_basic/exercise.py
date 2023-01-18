@@ -5,10 +5,11 @@ Redis class testing
 import redis
 from uuid import uuid4
 from typing import Union
+from typing import Callable
 from functools import wraps
 
 
-def count_calls(fn: callable) -> callable:
+def count_calls(fn: Callable) -> Callable:
     """
     Decorator function
     """
@@ -51,25 +52,29 @@ class Cache:
         self._redis.mset({k: data})
         return k
 
-    def get(self, key: Union[bytes, int, float, str],
-            fn: callable = None) -> Union[int, str, float, None]:
+    def get(self, key: Union[bytes, str],
+            fn: Callable = None) -> Union[bytes, int, str, float, None]:
         """
         Get a key from redis database
         """
 
-        ret = self._redis.get(key)
+        ret: Union[bytes,
+                   int,
+                   str,
+                   float,
+                   None] = self._redis.get(key)
         if ret is None or fn is None:
             return ret
         return fn(ret)
 
-    def get_str(self, key: str) -> str:
+    def get_str(self, key: Union[bytes, str]):
         """
         gets a str from redis database
         """
 
         return self.get(key, str)
 
-    def get_int(self, key: str) -> int:
+    def get_int(self, key: Union[bytes, str]):
         """
         gets an int from redis database
         """
